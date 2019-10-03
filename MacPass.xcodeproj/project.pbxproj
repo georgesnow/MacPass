@@ -295,6 +295,8 @@
 		6021FE9818E1650F00C3BC51 /* DatabaseSettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6021FE9A18E1650F00C3BC51 /* DatabaseSettingsWindow.xib */; };
 		7837112C225540D1009BD28D /* PluginRepositoryBrowserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7837112E225540D1009BD28D /* PluginRepositoryBrowserView.xib */; };
 		78E1F8B022E3A5D600E738AE /* AutotypeDoctorReportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78E1F8B222E3A5D600E738AE /* AutotypeDoctorReportViewController.xib */; };
+		7E230F5C23468CC30008D01B /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E230F5923468CC30008D01B /* SAMKeychain.m */; };
+		7E230F5D23468CC30008D01B /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E230F5A23468CC30008D01B /* SAMKeychainQuery.m */; };
 		FA13910C1F9CD9EB0033D256 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = FA13910A1F9CD9EB0033D256 /* Localizable.stringsdict */; };
 		FA9FD3271FB5E8F4003CEDD6 /* AutotypeCandidateSelectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9FD3291FB5E8F4003CEDD6 /* AutotypeCandidateSelectionView.xib */; };
 		FA9FD32C1FB5EDD3003CEDD6 /* AutotypeBuilderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9FD32E1FB5EDD3003CEDD6 /* AutotypeBuilderView.xib */; };
@@ -964,6 +966,10 @@
 		78E1F8BE22E3B1BF00E738AE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/AutotypeCandidateSelectionView.strings; sourceTree = "<group>"; };
 		78E1F8C022E3B22500E738AE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/PluginDataView.strings; sourceTree = "<group>"; };
 		78E1F8C122E3B32D00E738AE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		7E230F5823468CC30008D01B /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
+		7E230F5923468CC30008D01B /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
+		7E230F5A23468CC30008D01B /* SAMKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychainQuery.m; sourceTree = "<group>"; };
+		7E230F5B23468CC30008D01B /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
 		A019D80F22DC6B3C0085FD54 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		A083E27922DF467B0020E0D5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/PickcharsView.strings; sourceTree = "<group>"; };
 		A083E27A22DF467B0020E0D5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/PluginDataView.strings; sourceTree = "<group>"; };
@@ -1488,6 +1494,7 @@
 		4C77E36C15B84A240093A587 /* MacPass */ = {
 			isa = PBXGroup;
 			children = (
+				7E230F5323468C340008D01B /* Keychain */,
 				4CF9ECAE1BFDEC5700C58E99 /* Plugin */,
 				4C217D8E17A32BCF00609FAA /* Common */,
 				4C104129178CDD26001B5239 /* Categories */,
@@ -1764,6 +1771,17 @@
 			name = Plugin;
 			path = MacPass;
 			sourceTree = SOURCE_ROOT;
+		};
+		7E230F5323468C340008D01B /* Keychain */ = {
+			isa = PBXGroup;
+			children = (
+				7E230F5823468CC30008D01B /* SAMKeychain.h */,
+				7E230F5923468CC30008D01B /* SAMKeychain.m */,
+				7E230F5B23468CC30008D01B /* SAMKeychainQuery.h */,
+				7E230F5A23468CC30008D01B /* SAMKeychainQuery.m */,
+			);
+			path = Keychain;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -2073,6 +2091,7 @@
 				4CE39ABF16ECE34A000FE29D /* MPIconSelectViewController.m in Sources */,
 				4CE39AC416ECE4F7000FE29D /* MPIconImageView.m in Sources */,
 				4C46B88517063A070046109A /* NSString+MPPasswordCreation.m in Sources */,
+				7E230F5D23468CC30008D01B /* SAMKeychainQuery.m in Sources */,
 				4C5A11FE1708DE8700223D8A /* MPPasswordCreatorViewController.m in Sources */,
 				4CE5B54B173AFBA700207B39 /* MPDocument.m in Sources */,
 				4CE082C31F6FCD2A0034FF56 /* MPCollectionView.m in Sources */,
@@ -2107,6 +2126,7 @@
 				4CF6C711176F4533007A811D /* MPStringLengthValueTransformer.m in Sources */,
 				4C349A00218852160055AF45 /* MPKeyTyper.m in Sources */,
 				4CD5D705177A5F3300100649 /* MPDatabaseSettingsWindowController.m in Sources */,
+				7E230F5C23468CC30008D01B /* SAMKeychain.m in Sources */,
 				4C4FCE15177CFE6B00BBF7AE /* MPCustomFieldTableCellView.m in Sources */,
 				4C4B728518E4B9B400A1A5D5 /* MPDockTileHelper.m in Sources */,
 				4C5FE9AE17843CE20001D5A8 /* MPSelectedAttachmentTableCellView.m in Sources */,
