@@ -89,6 +89,7 @@ APPKIT_EXTERN NSString *const kMPSettingsKeyLoadIncompatiblePlugins;        // I
 APPKIT_EXTERN NSString *const kMPSettingsKeyHideIncopatiblePluginsWarning;  // Do not show an alert, when MacPass encounteres incompatible plugins
 APPKIT_EXTERN NSString *const kMPSettingsKeyAllowRemoteFetchOfPluginRepository; // Allow the download of the plugin repository file
 APPKIT_EXTERN NSString *const kMPSettingsKeyPluginHideAksForRemoveConnectionPermission;
+APPKIT_EXTERN NSString *const kMPSettingsKeyDatabasesUsingTouchID;
 
 typedef NS_ENUM(NSUInteger, MPFileChangeStrategy) {
   MPFileChangeStrategyAsk,
@@ -137,5 +138,20 @@ APPKIT_EXTERN NSString *const kMPSettingsKeyPasswordDefaultsForEntry;
  *  @return NSString containing the bindpath for this property for the NSUserDefaultController
  */
 + (NSString *)defaultControllerPathForKey:(NSString *)key;
+
+/**
+ *  Returns the names of the databases with enabled Touch ID unlocking.
+ */
++ (NSArray*)touchIdEnabledDatabases;
+
+/**
+ *  Adds a new database to the list of Touch ID enabled databases.
+ */
++ (void)addTouchIdEnabledDatabaseWithName: (NSString*)name;
+
+/**
+ *  Removes a new database to the list of Touch ID enabled databases.
+ */
++ (void)removeTouchIdEnabledDatabaseWithName: (NSString*)name;
 
 @end

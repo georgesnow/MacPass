@@ -346,6 +346,11 @@
 /* Keyfile not valid */
 "ERROR_INVALID_KEYFILE" = "Keyfile is invalid!";
 
+/* TouchID Messages */
+"ALERT_TOUCH_ID_MESSAGE" = "Use TouchID for unlocking this database?";
+"ALERT_TOUCH_ID_DESCRIPTION" = "If you select Yes, your database password will be saved in the Keychain and you will be able to unlock this database with your fingertip.";
+"TOUCHBAR_TOUCH_ID_MESSAGE" = "unlock this database";
+
 /* Error description given when adding an invalid plugin */
 "ERROR_INVALID_PLUGIN" = "Invalid plugin";
 

@@ -30,6 +30,7 @@
 #import "SAMKeychain.h"
 #import "SAMKeychainQuery.h"
 #import <LocalAuthentication/LocalAuthentication.h>
+#import "MPSettingsHelper.h"
 
 @interface MPPasswordEditWindowController ()
 
@@ -191,7 +192,7 @@
   
 
   if (error == nil) {
-//    [MPSettingsHelper addTouchIdEnabledDatabaseWithName:dbName]; //Add DB name in the list of Touch ID enabled databases
+    [MPSettingsHelper addTouchIdEnabledDatabaseWithName:dbName]; //Add DB name in the list of Touch ID enabled databases
     NSLog(@"Saved DB (%@) password in the keychain.", dbName);
   } else {
     NSLog(@"Error updating keychain with DB password: %@", error.localizedDescription);
@@ -209,7 +210,7 @@
   if (error == nil) {
     [SAMKeychain deletePasswordForService:@"MacPass" account:dbName];
 //    [passwordItem deleteItemAndReturnError:&error]; //Delete the password from the keychain
-//    [MPSettingsHelper removeTouchIdEnabledDatabaseWithName:dbName]; //Remove DB name from the list of Touch ID enabled databases
+    [MPSettingsHelper removeTouchIdEnabledDatabaseWithName:dbName]; //Remove DB name from the list of Touch ID enabled databases
     NSLog(@"DB (%@) password deleted from keychain.", dbName);
   } else {
     NSLog(@"Error deleting DB password from the keychain: %@", error.localizedDescription);
