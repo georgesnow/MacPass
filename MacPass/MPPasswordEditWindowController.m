@@ -182,6 +182,7 @@
 }
 - (void) _savePasswordInKeychain:(NSString*)password {
   MPDocument *document = self.document;
+  //not sure if this is the UUID or not?
   NSString *dbName = document.compositeKey.attributeKeys.firstObject;
   NSError *error = nil;
 
@@ -199,6 +200,7 @@
 
 - (void) _deletePasswordFromKeychain {
   MPDocument *document = self.document;
+  //not sure if this is the UUID or not?
   NSString *dbName = document.compositeKey.attributeKeys.firstObject;
   NSError *error = nil;
 
