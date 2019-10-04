@@ -229,6 +229,7 @@
 
   if (![MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName]) {
 //    [_useTouchIdButton setEnabled:NO];
+    
     return; //Do not ask for TouchID if its not enabled for this database.
   } else {
     [self _getPasswordFromKeychain];
@@ -254,11 +255,15 @@
 
 - (void) _getPasswordFromKeychain{
   NSString *passwordItem = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName];
-  __autoreleasing NSError *err = nil;
-
+//  __autoreleasing NSError *err = nil;
+  if ([passwordItem kpk_isNotEmpty]){
+     
     _passwordTextField.stringValue = passwordItem;
     [self _submit:nil];
-
+  }
+  else {
+    NSLog(@"Could not retrieve DB password from the keychain");
+  }
 //  NSString *pass = [passwordItem readPasswordAndReturnError:&err];
 //  if (err != nil) {
 //    NSLog(@"Could not retrieve DB password from the keychain:");
