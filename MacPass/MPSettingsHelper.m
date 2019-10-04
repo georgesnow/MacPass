@@ -164,7 +164,7 @@ NSString *const kMPSettingsKeyDatabasesUsingTouchID                       = @"Da
                          kMPSettingsKeyQuitOnLastWindowClose: @NO,
                          kMPSettingsKeyEnableAutosave: @YES,
                          kMPSettingsKeyHideAfterCopyToClipboard: @NO,
-                         kMPSettingsKeyDatabasesUsingTouchID: [NSMutableArray new]
+//                         kMPSettingsKeyDatabasesUsingTouchID: [NSMutableArray new]
                          };
   });
   return standardDefaults;

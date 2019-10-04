@@ -31,6 +31,8 @@
 #import "HNHUi/HNHUi.h"
 
 #import "NSError+Messages.h"
+#import "SAMKeychain.h"
+#import "SAMKeychainQuery.h"
 
 @interface MPPasswordInputController ()
 
@@ -50,6 +52,7 @@
 @property (assign) BOOL showPassword;
 @property (nonatomic, assign) BOOL enablePassword;
 @property (copy) passwordInputCompletionBlock completionHandler;
+@property (nonatomic, readonly) NSString *databaseName;
 @end
 
 @implementation MPPasswordInputController
@@ -81,6 +84,11 @@
   [self _reset];
 }
 
+-(void)viewDidAppear {
+  [super viewDidAppear];
+  [self _enableTouchID]; //Maybe call this when the password text field is focused and not on viewDidAppear...
+}
+
 - (NSResponder *)reconmendedFirstResponder {
   return self.passwordTextField;
 }
@@ -110,6 +118,12 @@
   else {
    self.passwordTextField.placeholderString = NSLocalizedString(@"PASSWORD_INPUT_NO_PASSWORD", "Placeholder in the unlock-password input field if password is disabled");
   }
+}
+
+- (NSString*) databaseName {
+  MPDocumentWindowController *documentWindow = self.windowController;
+  MPDocument *document = documentWindow.document;
+  return document.displayName;
 }
 
 #pragma mark -
@@ -209,6 +223,52 @@
   if (@available(macOS 10.12.2, *)) {
     _showPasswordButton.bezelColor = self.showPassword ? [NSColor selectedControlColor] : [NSColor controlColor];
   }
+}
+
+- (void)_enableTouchID {
+
+  if (![MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName]) {
+//    [_useTouchIdButton setEnabled:NO];
+    return; //Do not ask for TouchID if its not enabled for this database.
+  } else {
+    [self _getPasswordFromKeychain];
+  }
+
+//  if (MPOSHelper.supportsTouchID) {
+//    LAContext *myContext = [LAContext new];
+//    NSString *myLocalizedReasonString = NSLocalizedString(@"TOUCHBAR_TOUCH_ID_MESSAGE", @"");
+//    [myContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:myLocalizedReasonString reply:^(BOOL success, NSError * _Nullable error) {
+//      if (success) {
+//        // User authenticated successfully, take appropriate action
+//        NSLog(@"User authentication sucessful! Getting password from the keychain...");
+//        [self _getPasswordFromKeychain];
+//      } else {
+//        // User did not authenticate successfully, look at error and take appropriate action
+//        NSLog(@"User authentication failed. %@", error.localizedDescription);
+//      }
+//    }];
+//  } else {
+//    NSLog(@"TouchID is not supported.");
+//  }
+}
+
+- (void) _getPasswordFromKeychain{
+  NSString *passwordItem = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName];
+  __autoreleasing NSError *err = nil;
+
+    _passwordTextField.stringValue = passwordItem;
+    [self _submit:nil];
+
+//  NSString *pass = [passwordItem readPasswordAndReturnError:&err];
+//  if (err != nil) {
+//    NSLog(@"Could not retrieve DB password from the keychain:");
+//  } else {
+//    dispatch_sync(dispatch_get_main_queue(), ^{
+//      _passwordTextField.stringValue = passwordItem;
+//      [self _submit:nil];
+//    });
+//  }
+
 }
 
 @end

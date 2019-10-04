@@ -160,7 +160,7 @@
   NSError *authError = nil;
   LAContext *myContext = [LAContext new];
   if (@available(macOS 10.12.2, *)) {
-    if ([myContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&authError]) {
+//    if ([myContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&authError]) {
       
       NSAlert *alert = [NSAlert new];
       [alert addButtonWithTitle:@"Yes"];
@@ -176,7 +176,7 @@
         NSLog(@"User denied Touch ID. Deleting password from keychain.");
         [self _deletePasswordFromKeychain];
       }
-    }
+//    }
   } else {
     // Fallback on earlier versions
   }
@@ -184,7 +184,7 @@
 - (void) _savePasswordInKeychain:(NSString*)password {
   MPDocument *document = self.document;
   //not sure if this is the UUID or not?
-  NSString *dbName = document.compositeKey.attributeKeys.firstObject;
+  NSString *dbName = document.displayName;
   NSError *error = nil;
 
 //  KeychainPasswordItem *passwordItem = [[KeychainPasswordItem alloc] initWithService:@"MacPass" account:dbName accessGroup:nil];
@@ -202,7 +202,7 @@
 - (void) _deletePasswordFromKeychain {
   MPDocument *document = self.document;
   //not sure if this is the UUID or not?
-  NSString *dbName = document.compositeKey.attributeKeys.firstObject;
+  NSString *dbName = document.displayName;
   NSError *error = nil;
 
   
