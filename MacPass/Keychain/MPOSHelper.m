@@ -31,6 +31,7 @@
       }
     } else {
       // Fallback on earlier versions
+      return NO;
     }
   }
 

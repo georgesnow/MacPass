@@ -274,25 +274,28 @@
 
 - (void) _getPasswordFromKeychain{
   NSString *passwordItem = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName];
-//  __autoreleasing NSError *err = nil;
-  if ([passwordItem kpk_isNotEmpty]){
-     
-    _passwordTextField.stringValue = passwordItem;
-    [self _submit:nil];
-  }
-  else {
-    NSLog(@"Could not retrieve DB password from the keychain");
-  }
-//  NSString *pass = [passwordItem readPasswordAndReturnError:&err];
-//  if (err != nil) {
-//    NSLog(@"Could not retrieve DB password from the keychain:");
-//  } else {
-//    dispatch_sync(dispatch_get_main_queue(), ^{
-//      _passwordTextField.stringValue = passwordItem;
-//      [self _submit:nil];
-//    });
-//  }
+  __autoreleasing NSError *err = nil;
 
+//  NSString *pass = [passwordItem readPasswordAndReturnError:&err];
+  if (err != nil) {
+    NSLog(@"Could not retrieve DB password from the keychain:");
+  } else {
+    dispatch_async(dispatch_get_main_queue(), ^(){
+      self->_passwordTextField.stringValue = passwordItem;
+      [self _submit:nil];
+    });
+  }
+  
+  //old test method for filling out password...need to dispatch on the main thread...
+//  if ([passwordItem kpk_isNotEmpty]){
+//
+//    _passwordTextField.stringValue = passwordItem;
+//    [self _submit:nil];
+//  }
+//  else {
+//    NSLog(@"Could not retrieve DB password from the keychain");
+//  }
+//
 }
 
 @end
