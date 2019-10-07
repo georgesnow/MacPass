@@ -122,9 +122,9 @@
 }
 
 - (NSString*) databaseName {
-  MPDocumentWindowController *documentWindow = self.windowController;
+//  MPDocumentWindowController *documentWindow = self.windowController;
 //  Pointer needs to be fixed - possible fix:
-//  NSWindowController *documentWindow = self.windowController;
+  NSWindowController *documentWindow = self.windowController;
   MPDocument *document = documentWindow.document;
   return document.displayName;
 }
