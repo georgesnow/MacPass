@@ -160,7 +160,7 @@
   NSError *authError = nil;
   LAContext *myContext = [LAContext new];
   if (@available(macOS 10.12.2, *)) {
-//    if ([myContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&authError]) {
+    if ([myContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&authError]) {
       
       NSAlert *alert = [NSAlert new];
       [alert addButtonWithTitle:@"Yes"];
@@ -176,18 +176,36 @@
         NSLog(@"User denied Touch ID. Deleting password from keychain.");
         [self _deletePasswordFromKeychain];
       }
-//    }
-  } else {
+    }
+    else {
+      NSAlert *alert = [NSAlert new];
+      [alert addButtonWithTitle:@"Yes"];
+      [alert addButtonWithTitle:@"No"];
+      alert.messageText = NSLocalizedString(@"ALERT_TOUCH_ID_MESSAGE", @"");
+      alert.informativeText = NSLocalizedString(@"ALERT_TOUCH_ID_DESCRIPTION", @"");
+      [alert setAlertStyle:NSAlertStyleInformational];
+      
+      if ([alert runModal] == NSAlertFirstButtonReturn) {
+        // Yes clicked, use TouchID
+        [self _savePasswordInKeychain:password];
+      } else {
+        NSLog(@"User denied Touch ID. Deleting password from keychain.");
+        [self _deletePasswordFromKeychain];
+      }
+    }
+  }
+  else {
     // Fallback on earlier versions
+
   }
 }
 - (void) _savePasswordInKeychain:(NSString*)password {
   MPDocument *document = self.document;
-  //not sure if this is the UUID or not?
+//  Uses document name -- could also attach file path
+//  However, if the file is move and/or filename is changes it will fail
   NSString *dbName = document.displayName;
   NSError *error = nil;
 
-//  KeychainPasswordItem *passwordItem = [[KeychainPasswordItem alloc] initWithService:@"MacPass" account:dbName accessGroup:nil];
   [SAMKeychain setPassword:password forService:@"MacPass" account:dbName];
   
 
@@ -201,7 +219,8 @@
 
 - (void) _deletePasswordFromKeychain {
   MPDocument *document = self.document;
-  //not sure if this is the UUID or not?
+  //  Uses document name -- could also attach file path
+  //  However, if the file is moved and/or the filename is changed it will fail
   NSString *dbName = document.displayName;
   NSError *error = nil;
 
@@ -209,7 +228,6 @@
 
   if (error == nil) {
     [SAMKeychain deletePasswordForService:@"MacPass" account:dbName];
-//    [passwordItem deleteItemAndReturnError:&error]; //Delete the password from the keychain
     [MPSettingsHelper removeTouchIdEnabledDatabaseWithName:dbName]; //Remove DB name from the list of Touch ID enabled databases
     NSLog(@"DB (%@) password deleted from keychain.", dbName);
   } else {

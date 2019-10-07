@@ -33,6 +33,7 @@
 #import "NSError+Messages.h"
 #import "SAMKeychain.h"
 #import "SAMKeychainQuery.h"
+#import "MPOSHelper.h"
 
 @interface MPPasswordInputController ()
 
@@ -122,6 +123,8 @@
 
 - (NSString*) databaseName {
   MPDocumentWindowController *documentWindow = self.windowController;
+//  Pointer needs to be fixed - possible fix:
+//  NSWindowController *documentWindow = self.windowController;
   MPDocument *document = documentWindow.document;
   return document.displayName;
 }
@@ -231,10 +234,26 @@
 //    [_useTouchIdButton setEnabled:NO];
     
     return; //Do not ask for TouchID if its not enabled for this database.
+  } else if (MPOSHelper.supportsTouchID) {
+        LAContext *myContext = [LAContext new];
+        NSString *myLocalizedReasonString = NSLocalizedString(@"TOUCHBAR_TOUCH_ID_MESSAGE", @"");
+    if (@available(macOS 10.12.2, *)) {
+      [myContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:myLocalizedReasonString reply:^(BOOL success, NSError * _Nullable error) {
+        if (success) {
+          // User authenticated successfully, take appropriate action
+          NSLog(@"User authentication sucessful! Getting password from the keychain...");
+          [self _getPasswordFromKeychain];
+        } else {
+          // User did not authenticate successfully, look at error and take appropriate action
+          NSLog(@"User authentication failed. %@", error.localizedDescription);
+        }
+      }];
+    }
   } else {
+    NSLog(@"Else - getting password from keychain");
     [self _getPasswordFromKeychain];
   }
-
+}
 //  if (MPOSHelper.supportsTouchID) {
 //    LAContext *myContext = [LAContext new];
 //    NSString *myLocalizedReasonString = NSLocalizedString(@"TOUCHBAR_TOUCH_ID_MESSAGE", @"");
@@ -251,7 +270,7 @@
 //  } else {
 //    NSLog(@"TouchID is not supported.");
 //  }
-}
+
 
 - (void) _getPasswordFromKeychain{
   NSString *passwordItem = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName];

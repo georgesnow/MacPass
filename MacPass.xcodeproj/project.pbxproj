@@ -297,6 +297,7 @@
 		78E1F8B022E3A5D600E738AE /* AutotypeDoctorReportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78E1F8B222E3A5D600E738AE /* AutotypeDoctorReportViewController.xib */; };
 		7E230F5C23468CC30008D01B /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E230F5923468CC30008D01B /* SAMKeychain.m */; };
 		7E230F5D23468CC30008D01B /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E230F5A23468CC30008D01B /* SAMKeychainQuery.m */; };
+		7EB990BF234B945E00822169 /* MPOSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EB990BE234B945E00822169 /* MPOSHelper.m */; };
 		FA13910C1F9CD9EB0033D256 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = FA13910A1F9CD9EB0033D256 /* Localizable.stringsdict */; };
 		FA9FD3271FB5E8F4003CEDD6 /* AutotypeCandidateSelectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9FD3291FB5E8F4003CEDD6 /* AutotypeCandidateSelectionView.xib */; };
 		FA9FD32C1FB5EDD3003CEDD6 /* AutotypeBuilderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9FD32E1FB5EDD3003CEDD6 /* AutotypeBuilderView.xib */; };
@@ -970,6 +971,8 @@
 		7E230F5923468CC30008D01B /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
 		7E230F5A23468CC30008D01B /* SAMKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychainQuery.m; sourceTree = "<group>"; };
 		7E230F5B23468CC30008D01B /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
+		7EB990BE234B945E00822169 /* MPOSHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPOSHelper.m; sourceTree = "<group>"; };
+		7EB990C0234B947200822169 /* MPOSHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPOSHelper.h; sourceTree = "<group>"; };
 		A019D80F22DC6B3C0085FD54 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		A083E27922DF467B0020E0D5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/PickcharsView.strings; sourceTree = "<group>"; };
 		A083E27A22DF467B0020E0D5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/PluginDataView.strings; sourceTree = "<group>"; };
@@ -1779,6 +1782,8 @@
 				7E230F5923468CC30008D01B /* SAMKeychain.m */,
 				7E230F5B23468CC30008D01B /* SAMKeychainQuery.h */,
 				7E230F5A23468CC30008D01B /* SAMKeychainQuery.m */,
+				7EB990BE234B945E00822169 /* MPOSHelper.m */,
+				7EB990C0234B947200822169 /* MPOSHelper.h */,
 			);
 			path = Keychain;
 			sourceTree = "<group>";
@@ -2140,6 +2145,7 @@
 				4C0C59F118B17F10009C7B76 /* DDHotKeyUtilities.m in Sources */,
 				4CEE46DD181C301D006BF1E5 /* MPAutotypeDaemon.m in Sources */,
 				4C50CC041F6C18830095629D /* MPCollectionViewItem.m in Sources */,
+				7EB990BF234B945E00822169 /* MPOSHelper.m in Sources */,
 				4CA78C001FD58C92003C8560 /* MPPluginRepository.m in Sources */,
 				4CAD8AA622CF397B0090B2DD /* MPAutotypeDoctorReportViewController.m in Sources */,
 				4C8990F71EE978EB0043B48D /* MPDuplicateEntryOptionsWindowController.m in Sources */,
