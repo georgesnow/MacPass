@@ -234,8 +234,7 @@
 - (void)_enableTouchID {
 
   if (![MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName]) {
-//    [_useTouchIdButton setEnabled:NO];
-    
+    [_useTouchIdButton setHidden:YES];
     return; //Do not ask for TouchID if its not enabled for this database.
   } else if (MPOSHelper.supportsTouchID) {
         LAContext *myContext = [LAContext new];
@@ -252,9 +251,11 @@
         }
       }];
     }
-  } else {
+  } else if ([MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName] && !MPOSHelper.supportsTouchID) {
     NSLog(@"Else - getting password from keychain");
     [self _getPasswordFromKeychain];
+  } else {
+    NSLog(@"Skipped Touch ID and Keychain authentication");
   }
 }
 //  if (MPOSHelper.supportsTouchID) {
@@ -276,20 +277,41 @@
 
 
 - (void) _getPasswordFromKeychain{
-  NSString *passwordItem = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName];
-  __autoreleasing NSError *err = nil;
+//  NSString *passwordItem = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName];
+//  __autoreleasing NSError *err = nil;
+
+
+
+//  static dispatch_once_t onceToken;
+//  dispatch_once(&onceToken, ^{
+//      NSString *passwordItem = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName];
+//    __autoreleasing NSError *err = nil;
+//    if (err != nil) {
+//      NSLog(@"Could not retrieve DB password from the keychain:");
+//    } else {
+//      dispatch_sync(dispatch_get_main_queue(), ^{
+//
+//        self->_passwordTextField.stringValue = passwordItem;
+//        [self _submit:nil];
+//      });
+//    }
+//  });
+
+  BOOL didCheck = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName].boolValue;
 
 //  NSString *pass = [passwordItem readPasswordAndReturnError:&err];
-  if (err != nil) {
+  if (!didCheck) {
     NSLog(@"Could not retrieve DB password from the keychain:");
   } else {
-    dispatch_async(dispatch_get_main_queue(), ^(){
+    NSString *passwordItem = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName];
+    dispatch_async(dispatch_get_main_queue(), ^{
       self->_passwordTextField.stringValue = passwordItem;
       [self _submit:nil];
     });
   }
   
   //old test method for filling out password...need to dispatch on the main thread...
+//  NSString *passwordItem = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName];
 //  if ([passwordItem kpk_isNotEmpty]){
 //
 //    _passwordTextField.stringValue = passwordItem;
@@ -298,7 +320,7 @@
 //  else {
 //    NSLog(@"Could not retrieve DB password from the keychain");
 //  }
-//
+
 }
 
 @end
