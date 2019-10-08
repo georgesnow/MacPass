@@ -54,6 +54,7 @@
 @property (nonatomic, assign) BOOL enablePassword;
 @property (copy) passwordInputCompletionBlock completionHandler;
 @property (nonatomic, readonly) NSString *databaseName;
+@property (weak) IBOutlet NSButton *useTouchIdButton;
 @end
 
 @implementation MPPasswordInputController
@@ -195,7 +196,9 @@
   self.messageImageView.image = [NSImage imageNamed:NSImageNameCaution];
   self.messageInfoTextField.hidden = NO;
 }
-
+- (IBAction)showTouchIdDialog:(id)sender {
+  [self _enableTouchID];
+}
 
 - (NSTouchBar *)makeTouchBar {
   NSTouchBar *touchBar = [[NSTouchBar alloc] init];
