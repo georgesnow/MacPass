@@ -52,9 +52,14 @@
 
 @property (assign) BOOL showPassword;
 @property (nonatomic, assign) BOOL enablePassword;
+@property (nonatomic, assign) BOOL enableTID;
 @property (copy) passwordInputCompletionBlock completionHandler;
 @property (nonatomic, readonly) NSString *databaseName;
 @property (weak) IBOutlet NSButton *useTouchIdButton;
+@property (strong) IBOutlet NSButton *touchidEnabled;
+@property (weak) IBOutlet NSButtonCell *touchidEnable;
+@property (nonatomic) BOOL touchIDCheckButton;
+
 @end
 
 @implementation MPPasswordInputController
@@ -84,6 +89,14 @@
   [self.togglePasswordButton bind:NSEnabledBinding toObject:self withKeyPath:NSStringFromSelector(@selector(enablePassword)) options:nil];
   [self.passwordTextField bind:NSEnabledBinding toObject:self withKeyPath:NSStringFromSelector(@selector(enablePassword)) options:nil];
   [self _reset];
+  if ([MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName]) {
+    self.touchidEnabled.state = NSOnState;
+    _touchIDCheckButton = [MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName];
+    return;
+  } else {
+    self.touchidEnabled.state = NSOffState;
+    _touchIDCheckButton = [MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName];
+  }
 }
 
 -(void)viewDidAppear {
@@ -121,6 +134,7 @@
    self.passwordTextField.placeholderString = NSLocalizedString(@"PASSWORD_INPUT_NO_PASSWORD", "Placeholder in the unlock-password input field if password is disabled");
   }
 }
+
 
 - (NSString*) databaseName {
 //  MPDocumentWindowController *documentWindow = self.windowController;
@@ -199,6 +213,9 @@
 - (IBAction)showTouchIdDialog:(id)sender {
   [self _enableTouchID];
 }
+- (IBAction)enableTIDforDB:(id)sender {
+  [self _enableTouchID];
+}
 
 - (NSTouchBar *)makeTouchBar {
   NSTouchBar *touchBar = [[NSTouchBar alloc] init];
@@ -235,6 +252,7 @@
 
   if (![MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName]) {
     [_useTouchIdButton setHidden:YES];
+    self.touchidEnabled.state = NSOffState;
     return; //Do not ask for TouchID if its not enabled for this database.
   } else if (MPOSHelper.supportsTouchID) {
         LAContext *myContext = [LAContext new];
@@ -253,7 +271,9 @@
     }
   } else if ([MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName] && !MPOSHelper.supportsTouchID) {
     NSLog(@"Else - getting password from keychain");
-    [self _getPasswordFromKeychain];
+//    [self _getPasswordFromKeychain];
+    [_useTouchIdButton setHidden:NO];
+    self.touchidEnabled.state = NSOnState;
   } else {
     NSLog(@"Skipped Touch ID and Keychain authentication");
   }
@@ -274,7 +294,42 @@
 //  } else {
 //    NSLog(@"TouchID is not supported.");
 //  }
+- (IBAction)unlockTrigger:(id)sender {
+  if (self.touchidEnabled.state && [MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName]) {
+    [self performSelector:@selector(unlockViaTouchID)];
+  } else {
+    NSLog(@"touchid not setup");
+  }
+}
 
+-(void)unlockViaTouchID {
+  if (MPOSHelper.supportsTouchID) {
+    LAContext *myContext = [LAContext new];
+    NSString *myLocalizedReasonString = NSLocalizedString(@"TOUCHBAR_TOUCH_ID_MESSAGE", @"");
+    if (@available(macOS 10.12.2, *)) {
+      [myContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:myLocalizedReasonString reply:^(BOOL success, NSError * _Nullable error) {
+        if (success) {
+          // User authenticated successfully, take appropriate action
+          NSLog(@"User authentication sucessful! Getting password from the keychain...");
+          [self _getPasswordFromKeychain];
+        } else {
+          // User did not authenticate successfully, look at error and take appropriate action
+          NSLog(@"User authentication failed. %@", error.localizedDescription);
+        }
+      }];
+    } else if ([MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName] && !MPOSHelper.supportsTouchID) {
+      NSLog(@"Else - getting password from keychain");
+      [self _getPasswordFromKeychain];
+    } else {
+      NSLog(@"Skipped Touch ID and Keychain authentication");
+    }
+  } else if ([MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName] && !MPOSHelper.supportsTouchID) {
+    NSLog(@"Else - getting password from keychain");
+    [self _getPasswordFromKeychain];
+  } else {
+    NSLog(@"Skipped Touch ID and Keychain authentication");
+  }
+}
 
 - (void) _getPasswordFromKeychain{
 //  NSString *passwordItem = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName];
@@ -321,6 +376,34 @@
 //    NSLog(@"Could not retrieve DB password from the keychain");
 //  }
 
+
+  
 }
+- (IBAction)turnOnTouchID:(NSString *)password {
+  MPOSHelper *helper = [[MPOSHelper alloc] init];
+  BOOL buttonState = self.touchidEnabled.state;
+  if (![MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName]) {
+    
+    
+    password = self.passwordTextField.stringValue;
+    if (password.kpk_isNotEmpty) {
+      [helper askForTouchID:password document:self.databaseName];
+      self.touchidEnabled.state = NSOnState;
+    } else
+      NSLog(@"password field is empty");
+      self.touchidEnabled.state = NSOffState;
+    //Do not ask for TouchID if its not enabled for this database.
+  } else if (buttonState) {
+    NSLog(@"remove keychain");
+    [helper deletePasswordFromKeychain:self.databaseName];
+    self.touchidEnabled.state = NSOffState;
+  } else {
+    NSLog(@"else");
+    [helper deletePasswordFromKeychain:self.databaseName];
+    self.touchidEnabled.state = NSOffState;
+  }
+}
+
+
 
 @end
