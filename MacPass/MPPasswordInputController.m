@@ -389,6 +389,7 @@
     if (password.kpk_isNotEmpty) {
       [helper askForTouchID:password document:self.databaseName];
       self.touchidEnabled.state = NSOnState;
+      [_useTouchIdButton setHidden:NO];
     } else
       NSLog(@"password field is empty");
       self.touchidEnabled.state = NSOffState;
@@ -397,10 +398,12 @@
     NSLog(@"remove keychain");
     [helper deletePasswordFromKeychain:self.databaseName];
     self.touchidEnabled.state = NSOffState;
+    [_useTouchIdButton setHidden:YES];
   } else {
     NSLog(@"else");
     [helper deletePasswordFromKeychain:self.databaseName];
     self.touchidEnabled.state = NSOffState;
+    [_useTouchIdButton setHidden:YES];
   }
 }
 
