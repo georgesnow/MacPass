@@ -37,6 +37,7 @@ NSString *const kMPSettingsKeyFileChangeStrategy                      = @"FileCh
 NSString *const kMPSettingsKeyEnableAutosave                          = @"EnableAutosave";
 NSString *const kMPSettingsKeyLockOnSleep                             = @"LockOnSleep";
 NSString *const kMPSettingskeyLockOnLogout                            = @"LockOnLogout";
+NSString *const kMPSettingskeyLockOnScreenSleep                       = @"LockOnScreenSleep";
 NSString *const kMPSettingsKeyIdleLockTimeOut                         = @"IdleLockTimeOut";
 NSString *const kMPSettingsKeyShowInspector                           = @"ShowInspector";
 NSString *const kMPSettingsKeyEntryTableSortDescriptors               = @"EntryTableSortDescriptors";
@@ -103,7 +104,7 @@ NSString *const kMPSettingsKeyDatabasesUsingTouchID                       = @"Da
 @implementation MPSettingsHelper
 
 + (void)setupDefaults {
-  [[NSUserDefaults standardUserDefaults] registerDefaults:[self _standardDefaults]];
+  [NSUserDefaults.standardUserDefaults registerDefaults:[self _standardDefaults]];
 }
 
 + (void)migrateDefaults {
@@ -126,23 +127,24 @@ NSString *const kMPSettingsKeyDatabasesUsingTouchID                       = @"Da
     standardDefaults = @{
                          kMPSettingsKeyShowInspector: @YES, // Show the Inspector by default
                          kMPSettingsKeyPasteboardClearTimeout: @30, // 30 seconds
-                         kMPSettingsKeyClearPasteboardOnQuit: @YES,
+                         kMPSettingsKeyClearPasteboardOnQuit: @YES, // Clear Clipboard on quit
                          kMPSettingsKeyPreventUniversalClipboard: @YES, // Disable Universal Clipboard by default
                          kMPSettingsKeyOpenEmptyDatabaseOnLaunch: @NO,
                          kMPSettingsKeyReopenLastDatabaseOnLaunch: @YES,
                          kMPSettingsKeyFileChangeStrategy: @(MPFileChangeStrategyAsk), // Ask what to do on a file change!
                          kMPSettingsKeyLockOnSleep: @YES,
                          kMPSettingskeyLockOnLogout: @NO,
-                         kMPSettingsKeyIdleLockTimeOut: @0, // 5 minutes
+                         kMPSettingskeyLockOnScreenSleep: @NO,
+                         kMPSettingsKeyIdleLockTimeOut: @0, // Do not lock while idle by default
                          kMPSettingsKeyLegacyHideNotes: @NO,
                          kMPSettingsKeyLegacyHidePassword: @YES,
                          kMPSettingsKeyLegacyHideTitle: @NO,
                          kMPSettingsKeyLegacyHideURL: @NO,
                          kMPSettingsKeyLegacyHideUsername: @NO,
                          kMPSettingsKeyRememberKeyFilesForDatabases: @NO,
-                         kMPSettingsKeySendCommandForControlKey: @YES,
-                         kMPSettingsKeyEnableGlobalAutotype: @NO,
-                         kMPSettingsKeyGlobalAutotypeKeyDataKey: DDHotKey.defaultHotKeyData,
+                         kMPSettingsKeySendCommandForControlKey: @YES, // translate Ctrl to Cmd by default
+                         kMPSettingsKeyEnableGlobalAutotype: @NO, // Keep global autotype disabled by default
+                         kMPSettingsKeyGlobalAutotypeKeyDataKey: DDHotKey.defaultHotKeyData, // Cmd + Alt + M
                          kMPSettingsKeyDefaultGlobalAutotypeSequence: @"{USERNAME}{TAB}{PASSWORD}{ENTER}",
                          kMPSettingsKeyAutotypeMatchTitle: @YES,
                          kMPSettingsKeyAutotypeMatchURL: @NO,
@@ -195,7 +197,7 @@ NSString *const kMPSettingsKeyDatabasesUsingTouchID                       = @"Da
 + (void)_removeDeprecatedValues {
   /* Clear old style values */
   for(NSString *key in [self _deprecatedSettingsKeys]) {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+    [NSUserDefaults.standardUserDefaults removeObjectForKey:key];
   }
 }
 
@@ -208,38 +210,46 @@ NSString *const kMPSettingsKeyDatabasesUsingTouchID                       = @"Da
    this was changed in 0.6. to parent.title
    
    */
-  NSData *descriptorData = [[NSUserDefaults standardUserDefaults] dataForKey:kMPSettingsKeyEntryTableSortDescriptors];
+  NSData *descriptorData = [NSUserDefaults.standardUserDefaults dataForKey:kMPSettingsKeyEntryTableSortDescriptors];
   if(!descriptorData) {
     return; // No user defaults
   }
-  NSArray *sortDescriptors = [NSUnarchiver unarchiveObjectWithData:descriptorData];
+  NSArray *sortDescriptors = [NSKeyedUnarchiver unarchiveObjectWithData:descriptorData];
   
   for(NSSortDescriptor *descriptor in sortDescriptors) {
     /* Brute force, just kill the settings if they might cause trouble */
     if(descriptor.selector == @selector(compare:)
        || [descriptor.key isEqualToString:@"timeInfo.modificationDate"]
        || [descriptor.key isEqualToString:@"parent.name"] ) {
-      [[NSUserDefaults standardUserDefaults] removeObjectForKey:kMPSettingsKeyEntryTableSortDescriptors];
+      [NSUserDefaults.standardUserDefaults removeObjectForKey:kMPSettingsKeyEntryTableSortDescriptors];
       break;
     }
   }
 }
 
 + (void)_migrateURLDoubleClickPreferences {
-  /* Default was NO so if the key was not set, we also get NO, which is what we want */
-  BOOL openURL = [[NSUserDefaults standardUserDefaults] boolForKey:kMPDeprecatedSettingsKeyDoubleClickURLToLaunch];
-  if(NO == openURL) {
-    [[NSUserDefaults standardUserDefaults] setInteger:MPDoubleClickURLActionOpen forKey:kMPSettingsKeyDoubleClickURLAction];
+  /*
+   Default was NO so if the key was not set the correct action now should be MPDoubleClickURLActionCopy
+   But MPDoubleClickURLActionCopy is the default we cannot simply add this value.
+   Hence we chose to only migrate a changed default and let the "old" default silenty be updated
+   This is a worth trade-off since the other solution will always re-set the default
+   */
+  if(nil == [NSUserDefaults.standardUserDefaults objectForKey:kMPDeprecatedSettingsKeyDoubleClickURLToLaunch]) {
+    return; // the value was not set, do nothing since we cannot determine what to do
+  }
+  /* only update the settings if the defaults return an explicit set value */
+  if([NSUserDefaults.standardUserDefaults boolForKey:kMPDeprecatedSettingsKeyDoubleClickURLToLaunch]) {
+    [NSUserDefaults.standardUserDefaults setInteger:MPDoubleClickURLActionOpen forKey:kMPSettingsKeyDoubleClickURLAction];
   }
 }
 
 + (void)_migrateEntrySearchFlags {
-  /* Entry filters are now stored as archivd search context not just flags */
-  NSInteger flags = [[NSUserDefaults standardUserDefaults] integerForKey:kMPDeprecatedSettingsKeyEntrySearchFilterMode];
+  /* Entry filters are now stored as archived search context not just flags */
+  NSInteger flags = [NSUserDefaults.standardUserDefaults integerForKey:kMPDeprecatedSettingsKeyEntrySearchFilterMode];
   if(flags != 0) {
     MPEntrySearchContext *context = [[MPEntrySearchContext alloc] initWithString:nil flags:flags];
     NSData *contextData = [NSKeyedArchiver archivedDataWithRootObject:context];
-    [[NSUserDefaults standardUserDefaults] setObject:contextData forKey:kMPSettingsKeyEntrySearchFilterContext];
+    [NSUserDefaults.standardUserDefaults setObject:contextData forKey:kMPSettingsKeyEntrySearchFilterContext];
   }
 }
 
@@ -248,7 +258,7 @@ NSString *const kMPSettingsKeyDatabasesUsingTouchID                       = @"Da
    Database file paths was stored as plain text in keyfile mapping.
    We only need to store the key file url in plain text, thus hashing the path is sufficent
    */
-  NSDictionary<NSString *, NSString *> *currentMapping = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kMPSettingsKeyRememeberdKeysForDatabases];
+  NSDictionary<NSString *, NSString *> *currentMapping = [NSUserDefaults.standardUserDefaults dictionaryForKey:kMPSettingsKeyRememeberdKeysForDatabases];
   if(!currentMapping) {
     return;
   }
@@ -270,7 +280,7 @@ NSString *const kMPSettingsKeyDatabasesUsingTouchID                       = @"Da
     }
   }
   if(didHash) {
-    [[NSUserDefaults standardUserDefaults] setObject:hashedDict forKey:kMPSettingsKeyRememeberdKeysForDatabases];
+    [NSUserDefaults.standardUserDefaults setObject:hashedDict forKey:kMPSettingsKeyRememeberdKeysForDatabases];
   }
 }
 

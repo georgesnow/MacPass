@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14868" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14868"/>
+=======
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+>>>>>>> 2d7a01df10b91eb2bc1b8a98c7ab784b28403377
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MPDocumentWindowController">
             <connections>
-                <outlet property="splitView" destination="697" id="700"/>
                 <outlet property="window" destination="1" id="501"/>
             </connections>
         </customObject>
@@ -21,13 +27,16 @@
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
             <view key="contentView" id="2">
                 <rect key="frame" x="0.0" y="0.0" width="700" height="500"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             </view>
-            <point key="canvasLocation" x="54" y="51"/>
+            <point key="canvasLocation" x="256" y="42"/>
         </window>
+<<<<<<< HEAD
         <splitView autosaveName="" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="697">
             <rect key="frame" x="0.0" y="0.0" width="560" height="194"/>
             <point key="canvasLocation" x="-43" y="-386"/>
         </splitView>
+=======
+>>>>>>> 2d7a01df10b91eb2bc1b8a98c7ab784b28403377
     </objects>
 </document>

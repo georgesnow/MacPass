@@ -34,9 +34,6 @@
 @interface MPDocumentWindowController : NSWindowController <NSTouchBarDelegate>
 
 @property (readonly, strong) MPPasswordInputController *passwordInputController;
-@property (readonly, strong) MPEntryViewController *entryViewController;
-@property (readonly, strong) MPOutlineViewController *outlineViewController;
-@property (readonly, strong) MPInspectorViewController *inspectorViewController;
 @property (readonly, strong) MPToolbarDelegate *toolbarDelegate;
 
 @property (readonly, nonatomic, strong) NSSearchField *searchField;
@@ -58,7 +55,8 @@
 - (IBAction)exportAsXML:(id)sender;
 - (IBAction)mergeWithOther:(id)sender;
 - (IBAction)importFromXML:(id)sender;
-- (IBAction)importFromPlugin:(id)sender;
+- (IBAction)importWithPlugin:(id)sender;
+- (IBAction)exportWithPlugin:(id)sender;
 
 - (IBAction)lock:(id)sender;
 - (IBAction)createGroup:(id)sender;

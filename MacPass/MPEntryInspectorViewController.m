@@ -219,7 +219,7 @@ typedef NS_ENUM(NSUInteger, MPEntryTab) {
   savePanel.nameFieldStringValue = binary.name;
   
   [savePanel beginSheetModalForWindow:self.windowController.window completionHandler:^(NSInteger result) {
-    if(result == NSFileHandlingPanelOKButton) {
+    if(result == NSModalResponseOK) {
       NSError *error;
       BOOL sucess = [binary saveToLocation:savePanel.URL error:&error];
       if(!sucess && error) {
@@ -237,7 +237,7 @@ typedef NS_ENUM(NSUInteger, MPEntryTab) {
   openPanel.prompt = NSLocalizedString(@"OPEN_BUTTON_ADD_ATTACHMENT_OPEN_PANEL", "Open button in the open panel to add attachments to an entry");
   openPanel.message = NSLocalizedString(@"MESSAGE_ADD_ATTACHMENT_OPEN_PANEL", "Message in the open panel to add attachments to an entry");
   [openPanel beginSheetModalForWindow:self.windowController.window completionHandler:^(NSInteger result) {
-    if(result == NSFileHandlingPanelOKButton) {
+    if(result == NSModalResponseOK) {
       for (NSURL *attachmentURL in openPanel.URLs) {
         KPKBinary *binary = [[KPKBinary alloc] initWithContentsOfURL:attachmentURL];
         [self.observer willChangeModelProperty];
@@ -297,7 +297,7 @@ typedef NS_ENUM(NSUInteger, MPEntryTab) {
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
   switch([MPActionHelper typeForAction:menuItem.action]) {
     case MPActionToggleQuicklook: {
-      BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kMPSettingsKeyEnableQuicklookPreview];
+      BOOL enabled = [NSUserDefaults.standardUserDefaults boolForKey:kMPSettingsKeyEnableQuicklookPreview];
       return enabled ? [self acceptsPreviewPanelControl:nil] : NO;
     case MPActionRemoveAttachment:
       return !self.representedEntry.isHistory;
@@ -323,16 +323,16 @@ typedef NS_ENUM(NSUInteger, MPEntryTab) {
 
 - (void)endPreviewPanelControl:(QLPreviewPanel *)panel {
   MPTemporaryFileStorage *storage = (MPTemporaryFileStorage *)panel.dataSource;
-  [[MPTemporaryFileStorageCenter defaultCenter] unregisterStorage:storage];
+  [MPTemporaryFileStorageCenter.defaultCenter unregisterStorage:storage];
 }
 
 - (void)_updatePreviewItemForPanel:(QLPreviewPanel *)panel {
-  NSInteger row = [self.attachmentTableView selectedRow];
+  NSInteger row = self.attachmentTableView.selectedRow;
   NSAssert(row > -1, @"Row needs to be selected");
   KPKBinary *binary = self.representedEntry.binaries[row];
   MPTemporaryFileStorage *oldStorage = (MPTemporaryFileStorage *)panel.dataSource;
-  [[MPTemporaryFileStorageCenter defaultCenter] unregisterStorage:oldStorage];
-  panel.dataSource = [[MPTemporaryFileStorageCenter defaultCenter] storageForBinary:binary];
+  [MPTemporaryFileStorageCenter.defaultCenter unregisterStorage:oldStorage];
+  panel.dataSource = [MPTemporaryFileStorageCenter.defaultCenter storageForBinary:binary];
 }
 
 #pragma mark -
@@ -557,6 +557,7 @@ typedef NS_ENUM(NSUInteger, MPEntryTab) {
   NSMenu *customFieldMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"ADD_CUSTOM_FIELD_CONTEXT_MENU", @"Menu displayed for adding special custom keys")];
   customFieldMenu.delegate = _addCustomFieldContextMenuDelegate;
   self.addCustomFieldButton.contextMenu = customFieldMenu;
+  [self.addCustomFieldButton setEnabled:NO forSegment:MPContextButtonSegmentContextButton];
 }
 
 #pragma mark -

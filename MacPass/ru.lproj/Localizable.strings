@@ -132,13 +132,13 @@
 "AUTOTYPE_NOTIFICATION_MACPASS_IS_MISSING_PERMISSIONS" = "MacPass не имеет необходимых разрешений для выполнения автоввода";
 
 /* Notification: Autotype failed, no documents are open */
-"AUTOTYPE_OVERLAY_NO_DOCUMENTS" = "Откройте файл базы данных для использования глобального автоввода!";
+"AUTOTYPE_NOTIFICATION_NO_DOCUMENTS_INFORMATIVE_TEXT" = "Откройте файл базы данных для использования глобального автоввода!";
 
 /* Noticiation: Autotype failed to find a match for %@ (string placeholder) */
-"AUTOTYPE_OVERLAY_NO_MATCH_FOR_%@" = "Нет соответствий %@!";
+"AUTOTYPE_NOTIFICATION_NO_MATCH_FOR_%@" = "Нет соответствий %@!";
 
 /* Notification: Autotype found a single match for %@ (string placeholder). */
-"AUTOTYPE_OVERLAY_SINGLE_MATCH_FOR_%@" = "Найдено совпадение с %@";
+"AUTOTYPE_NOTIFICATION_SINGLE_MATCH_FOR_%@" = "Найдено совпадение с %@";
 
 /* Status lable when no issue were found in accessibilty */
 "AUTOTYPE_STATUS_ACCESSIBILTY_PERMISSIONS_OK" = "MacPass имеет разрешение на управление компьютером";
@@ -316,13 +316,19 @@
 "DRAG_GROUP" = "Перетащить группу";
 
 /* Action name for duplicating entries */
-"DUPLICATE_ENTRIES_%ld" = "Дублирующиеся записи %ld";
+"DUPLICATE_ENTRIES_ACTION_NAME" = "Дублировать Записи";
 
 /* Menu item to directly diplicate an entry */
-"DUPLICATE_ENTRY" = "Скопировать Запись";
+"DUPLICATE_ENTRY" = "Дублировать Запись";
 
 /* Menu item to duplicate an entry with options how to duplicate. Will present a dialog. */
-"DUPLICATE_ENTRY_WITH_OPTIONS" = "Скопировать Запись…";
+"DUPLICATE_ENTRY_WITH_OPTIONS" = "Дублировать Запись…";
+
+/* Menu item to directly diplicate a group */
+"DUPLICATE_GROUP" = "Дублировать Группу";
+
+/* Action name for duplicating groups */
+"DUPLICATE_GROUPS_ACTION_NAME" = "Дублировать Группу";
 
 /* Menu item in the database outline context menu to change the template group
    Menu item on the add entry context menu to edit template groups */
@@ -356,7 +362,7 @@
 "ERROR_INVALID_PLUGIN" = "Недействительный плагин";
 
 /* Error description for missing accessibilty permissions */
-"ERROR_NO_ACCESSIBILTY_PERMISSIONS" = "MacPass не имеет разрешения на управление компьютером (Универсальный доступ)";
+"ERROR_NO_ACCESSIBILITY_PERMISSIONS" = "MacPass не имеет разрешения на управление компьютером (Универсальный доступ)";
 
 /* Error description for missing screen recording permissions */
 "ERROR_NO_PERMISSION_TO_RECORD_SCREEN" = "MacPass не имеет разрешения на запись экрана";
@@ -695,6 +701,9 @@
 
 /* Action button in Notification to show the Autotype Doctor */
 "SHOW_AUTOTYPE_DOCTOR" = "Показать помощник автоввода";
+
+/* Menu item to show the entries group in the outline view */
+"SHOW_GROUP_IN_OUTLINE" = "Показать группу";
 
 /* Menu item to show the history of the selected entry
    Toolbar item to toggle history display */

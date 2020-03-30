@@ -22,6 +22,8 @@
 #import "MPAutotypeCandidateSelectionViewController.h"
 #import "MPAutotypeContext.h"
 #import "MPAutotypeDaemon.h"
+#import "MPAutotypeEnvironment.h"
+#import "MPExtendedTableCellView.h"
 
 #import "KPKNode+IconImage.h"
 
@@ -43,7 +45,7 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   NSString *template = NSLocalizedString(@"AUTOTYPE_CANDIDATE_SELECTION_WINDOW_MESSAGE_%@", "Message text in the autotype selection window. Placeholder is %1 - windowTitle");
-  self.messageTextField.stringValue = [NSString stringWithFormat:template, self.windowTitle];
+  self.messageTextField.stringValue = [NSString stringWithFormat:template, self.environment.windowTitle];
   self.selectAutotypeContextButton.enabled = NO;
   NSNotification *notification = [NSNotification notificationWithName:NSTableViewSelectionDidChangeNotification object:self.contextTableView];
   [self tableViewSelectionDidChange:notification];
@@ -58,12 +60,10 @@
 #pragma mark NSTableViewDelegate
 
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-  NSTableCellView *view = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
+  MPExtendedTableCellView *view = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
   MPAutotypeContext *context = self.candidates[row];
-  NSString *maskedEvaluatedCommand = context.maskedEvaluatedCommand;
-  NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", context.entry.title, maskedEvaluatedCommand]];
-  [string setAttributes:@{NSForegroundColorAttributeName: NSColor.disabledControlTextColor} range:NSMakeRange((string.length - maskedEvaluatedCommand.length), maskedEvaluatedCommand.length)];
-  view.textField.attributedStringValue = string;
+  view.addionalTextField.stringValue = context.maskedEvaluatedCommand;
+  view.textField.stringValue = context.entry.title;
   view.imageView.image = context.entry.iconImage;
   return view;
 }
@@ -80,7 +80,7 @@
 - (void)selectAutotypeContext:(id)sender {
   NSInteger selectedRow = self.contextTableView.selectedRow;
   if(selectedRow >= 0 && selectedRow < self.candidates.count) {
-    [MPAutotypeDaemon.defaultDaemon selectAutotypeCandiate:self.candidates[selectedRow]];
+    [MPAutotypeDaemon.defaultDaemon selectAutotypeContext:self.candidates[selectedRow] forEnvironment:self.environment];
   }
   else {
     [self cancelSelection:sender]; // cancel since the selection was invalid!
@@ -88,7 +88,7 @@
 }
 
 - (void)cancelSelection:(id)sender {
-  [[MPAutotypeDaemon defaultDaemon] cancelAutotypeCandidateSelection];
+  [MPAutotypeDaemon.defaultDaemon cancelAutotypeContextSelectionForEnvironment:self.environment];
 }
 
 

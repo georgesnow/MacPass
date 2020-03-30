@@ -42,6 +42,7 @@
 @property (weak) IBOutlet MPPathControl *keyPathControl;
 @property (weak) IBOutlet NSImageView *messageImageView;
 @property (weak) IBOutlet NSTextField *messageInfoTextField;
+@property (strong) IBOutlet NSTextField *keyFileWarningTextField;
 @property (weak) IBOutlet NSButton *togglePasswordButton;
 @property (weak) IBOutlet NSButton *enablePasswordCheckBox;
 @property (weak) IBOutlet NSButton *unlockButton;
@@ -54,11 +55,14 @@
 @property (nonatomic, assign) BOOL enablePassword;
 @property (nonatomic, assign) BOOL enableTID;
 @property (copy) passwordInputCompletionBlock completionHandler;
+<<<<<<< HEAD
 @property (nonatomic, readonly) NSString *databaseName;
 @property (weak) IBOutlet NSButton *useTouchIdButton;
 @property (strong) IBOutlet NSButton *touchidEnabled;
 @property (weak) IBOutlet NSButtonCell *touchidEnable;
 @property (nonatomic) BOOL touchIDCheckButton;
+=======
+>>>>>>> 2d7a01df10b91eb2bc1b8a98c7ab784b28403377
 
 @end
 
@@ -82,6 +86,7 @@
 }
 
 - (void)viewDidLoad {
+  [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(_didSetKeyURL:) name:MPPathControlDidSetURLNotification object:self.keyPathControl];
   self.messageImageView.image = [NSImage imageNamed:NSImageNameCaution];
   [self.passwordTextField bind:NSStringFromSelector(@selector(showPassword)) toObject:self withKeyPath:NSStringFromSelector(@selector(showPassword)) options:nil];
   [self.togglePasswordButton bind:NSValueBinding toObject:self withKeyPath:NSStringFromSelector(@selector(showPassword)) options:nil];
@@ -131,7 +136,7 @@
     self.passwordTextField.placeholderString = NSLocalizedString(@"PASSWORD_INPUT_ENTER_PASSWORD", "Placeholder in the unlock-password input field if password is enabled");
   }
   else {
-   self.passwordTextField.placeholderString = NSLocalizedString(@"PASSWORD_INPUT_NO_PASSWORD", "Placeholder in the unlock-password input field if password is disabled");
+    self.passwordTextField.placeholderString = NSLocalizedString(@"PASSWORD_INPUT_NO_PASSWORD", "Placeholder in the unlock-password input field if password is disabled");
   }
 }
 
@@ -248,6 +253,7 @@
   }
 }
 
+<<<<<<< HEAD
 - (void)_enableTouchID {
 
   if (![MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName]) {
@@ -404,9 +410,35 @@
     [helper deletePasswordFromKeychain:self.databaseName];
     self.touchidEnabled.state = NSOffState;
     [_useTouchIdButton setHidden:YES];
+=======
+- (void)_didSetKeyURL:(NSNotification *)notification {
+  if(notification.object != self.keyPathControl) {
+    return; // wrong sender
+  }
+  NSDocument *document = (NSDocument *)self.windowController.document;
+  NSData *keyFileData = [NSData dataWithContentsOfURL:self.keyPathControl.URL];
+  KPKFileVersion keyFileVersion = [KPKFormat.sharedFormat fileVersionForData:keyFileData];
+  BOOL isKdbDatabaseFile = (keyFileVersion.format != KPKDatabaseFormatUnknown);
+  if(isKdbDatabaseFile) {
+    if([document.fileURL isEqual:self.keyPathControl.URL]) {
+      self.keyFileWarningTextField.stringValue = NSLocalizedString(@"WARNING_CURRENT_DATABASE_FILE_SELECTED_AS_KEY_FILE", "Error message displayed when the current database file is also set as the key file");
+      self.keyFileWarningTextField.hidden = NO;
+    }
+    else {
+      self.keyFileWarningTextField.stringValue = NSLocalizedString(@"WARNING_DATABASE_FILE_SELECTED_AS_KEY_FILE", "Error message displayed when a keepass database file is set as the key file");
+      self.keyFileWarningTextField.hidden = NO;
+    }
+  }
+  else {
+    self.keyFileWarningTextField.stringValue = @"";
+    self.keyFileWarningTextField.hidden = YES;
+>>>>>>> 2d7a01df10b91eb2bc1b8a98c7ab784b28403377
   }
 }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2d7a01df10b91eb2bc1b8a98c7ab784b28403377
 @end
