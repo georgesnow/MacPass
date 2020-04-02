@@ -55,14 +55,11 @@
 @property (nonatomic, assign) BOOL enablePassword;
 @property (nonatomic, assign) BOOL enableTID;
 @property (copy) passwordInputCompletionBlock completionHandler;
-<<<<<<< HEAD
 @property (nonatomic, readonly) NSString *databaseName;
 @property (weak) IBOutlet NSButton *useTouchIdButton;
 @property (strong) IBOutlet NSButton *touchidEnabled;
 @property (weak) IBOutlet NSButtonCell *touchidEnable;
 @property (nonatomic) BOOL touchIDCheckButton;
-=======
->>>>>>> 2d7a01df10b91eb2bc1b8a98c7ab784b28403377
 
 @end
 
@@ -253,7 +250,7 @@
   }
 }
 
-<<<<<<< HEAD
+
 - (void)_enableTouchID {
 
   if (![MPSettingsHelper.touchIdEnabledDatabases containsObject:self.databaseName]) {
@@ -405,12 +402,14 @@
     [helper deletePasswordFromKeychain:self.databaseName];
     self.touchidEnabled.state = NSOffState;
     [_useTouchIdButton setHidden:YES];
-  } else {
+  } else
     NSLog(@"else");
     [helper deletePasswordFromKeychain:self.databaseName];
     self.touchidEnabled.state = NSOffState;
     [_useTouchIdButton setHidden:YES];
-=======
+  
+}
+
 - (void)_didSetKeyURL:(NSNotification *)notification {
   if(notification.object != self.keyPathControl) {
     return; // wrong sender
@@ -432,13 +431,7 @@
   else {
     self.keyFileWarningTextField.stringValue = @"";
     self.keyFileWarningTextField.hidden = YES;
->>>>>>> 2d7a01df10b91eb2bc1b8a98c7ab784b28403377
+
   }
 }
-
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 2d7a01df10b91eb2bc1b8a98c7ab784b28403377
 @end
