@@ -261,7 +261,7 @@
         LAContext *myContext = [LAContext new];
         NSString *myLocalizedReasonString = NSLocalizedString(@"TOUCHBAR_TOUCH_ID_MESSAGE", @"");
     if (@available(macOS 10.12.2, *)) {
-      [myContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:myLocalizedReasonString reply:^(BOOL success, NSError * _Nullable error) {
+      [myContext evaluatePolicy:LAPolicyDeviceOwnerAuthentication localizedReason:myLocalizedReasonString reply:^(BOOL success, NSError * _Nullable error) {
         if (success) {
           // User authenticated successfully, take appropriate action
           NSLog(@"User authentication sucessful! Getting password from the keychain...");
@@ -310,7 +310,7 @@
     LAContext *myContext = [LAContext new];
     NSString *myLocalizedReasonString = NSLocalizedString(@"TOUCHBAR_TOUCH_ID_MESSAGE", @"");
     if (@available(macOS 10.12.2, *)) {
-      [myContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:myLocalizedReasonString reply:^(BOOL success, NSError * _Nullable error) {
+      [myContext evaluatePolicy:LAPolicyDeviceOwnerAuthentication localizedReason:myLocalizedReasonString reply:^(BOOL success, NSError * _Nullable error) {
         if (success) {
           // User authenticated successfully, take appropriate action
           NSLog(@"User authentication sucessful! Getting password from the keychain...");
@@ -354,18 +354,26 @@
 //      });
 //    }
 //  });
+  NSError *error = nil;
+  SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
+  query.service = @"MacPass";
+  query.account = self.databaseName;
+  [query fetch:&error];
 
-  BOOL didCheck = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName].boolValue;
-
-//  NSString *pass = [passwordItem readPasswordAndReturnError:&err];
-  if (!didCheck) {
-    NSLog(@"Could not retrieve DB password from the keychain:");
-  } else {
+  if ([error code] == errSecItemNotFound) {
+    NSLog(@"Not password found for current database in the keychain");
+  } else if (error !=nil) {
+    NSLog(@"Erro retrieving password for current database from the keychain");
+  }  else {
     NSString *passwordItem = [SAMKeychain passwordForService:@"MacPass" account:self.databaseName];
+    if(!passwordItem.kpk_isNotEmpty){
+      NSLog(@"Password field was empty on retrieval from the keychain");
+    } else {
     dispatch_async(dispatch_get_main_queue(), ^{
-      self->_passwordTextField.stringValue = passwordItem;
+      self.passwordTextField.stringValue = passwordItem;
       [self _submit:nil];
     });
+    }
   }
   
   //old test method for filling out password...need to dispatch on the main thread...

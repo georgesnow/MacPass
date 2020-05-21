@@ -160,7 +160,7 @@
   NSError *authError = nil;
   LAContext *myContext = [LAContext new];
   if (@available(macOS 10.12.2, *)) {
-    if ([myContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&authError]) {
+    if ([myContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:&authError]) {
       
       NSAlert *alert = [NSAlert new];
       [alert addButtonWithTitle:@"Yes"];
