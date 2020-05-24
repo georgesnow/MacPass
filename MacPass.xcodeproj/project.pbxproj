@@ -299,6 +299,7 @@
 		7E230F5C23468CC30008D01B /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E230F5923468CC30008D01B /* SAMKeychain.m */; };
 		7E230F5D23468CC30008D01B /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E230F5A23468CC30008D01B /* SAMKeychainQuery.m */; };
 		7EB990BF234B945E00822169 /* MPOSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EB990BE234B945E00822169 /* MPOSHelper.m */; };
+		A4BED18F247A35A50065F7E2 /* 69_Authenticate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A4BED18E247A35A50065F7E2 /* 69_Authenticate.pdf */; };
 		FA13910C1F9CD9EB0033D256 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = FA13910A1F9CD9EB0033D256 /* Localizable.stringsdict */; };
 		FA9FD3271FB5E8F4003CEDD6 /* AutotypeCandidateSelectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9FD3291FB5E8F4003CEDD6 /* AutotypeCandidateSelectionView.xib */; };
 		FA9FD32C1FB5EDD3003CEDD6 /* AutotypeBuilderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9FD32E1FB5EDD3003CEDD6 /* AutotypeBuilderView.xib */; };
@@ -985,6 +986,7 @@
 		A083E27E22DF467B0020E0D5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/AutotypeBuilderView.strings; sourceTree = "<group>"; };
 		A083E27F22DF467B0020E0D5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/PickfieldView.strings; sourceTree = "<group>"; };
 		A083E28022DF467B0020E0D5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/PluginRepositoryBrowserView.strings; sourceTree = "<group>"; };
+		A4BED18E247A35A50065F7E2 /* 69_Authenticate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = 69_Authenticate.pdf; sourceTree = "<group>"; };
 		A50AD5CF212884A0007C85EB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/PluginDataView.strings; sourceTree = "<group>"; };
 		A50AD5D0212884A0007C85EB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/PickfieldView.strings; sourceTree = "<group>"; };
 		ABAA99A4231519150095D78E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SavePanelAccessoryView.strings"; sourceTree = "<group>"; };
@@ -1430,6 +1432,7 @@
 				4C3826A31AD04D8E007D7D67 /* 66_MoneyTemplate.pdf */,
 				4C3826A41AD04D8E007D7D67 /* 67_CertificatTemplate.pdf */,
 				4C52A891178863B000868229 /* 68_PhoneTemplate.pdf */,
+				A4BED18E247A35A50065F7E2 /* 69_Authenticate.pdf */,
 			);
 			name = "Database Icons";
 			path = Resources/Icons;
@@ -1988,6 +1991,7 @@
 				6021FE8218E160BC00C3BC51 /* PasswordEditWindow.xib in Resources */,
 				4C17D11E2250EFBC00C650C4 /* SavePanelAccessoryView.xib in Resources */,
 				4CE88B9717BA651C0042E078 /* contextTriangleTemplate.pdf in Resources */,
+				A4BED18F247A35A50065F7E2 /* 69_Authenticate.pdf in Resources */,
 				4C7ABA4817BAEC6700FF5799 /* 15_ScannerTemplate.pdf in Resources */,
 				4C7ABA4917BAEC6700FF5799 /* 16_BrowserTemplate.pdf in Resources */,
 				4C7ABA4A17BAEC6700FF5799 /* 17_CDRomTemplate.pdf in Resources */,
@@ -2914,6 +2918,7 @@
 				GCC_PREFIX_HEADER = "MacPass/MacPass-Prefix.pch";
 				INFOPLIST_FILE = "MacPass/MacPass-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				OTHER_CODE_SIGN_FLAGS = "--deep";
 				OTHER_LDFLAGS = (
 					"-lxml2",
 					"-Wl,-rpath,@loader_path/../Frameworks",
@@ -2945,6 +2950,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "MacPass/MacPass-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				OTHER_CODE_SIGN_FLAGS = "--deep";
 				OTHER_LDFLAGS = (
 					"-lxml2",
 					"-Wl,-rpath,@loader_path/../Frameworks",
