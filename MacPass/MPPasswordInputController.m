@@ -268,9 +268,12 @@
           NSLog(@"User authentication sucessful! Getting password from the keychain...");
           [self _getPasswordFromKeychain];
         } else {
-          if (self->_authenticateButton) {
-            [self->_authenticateButton setHidden:NO];
-          }
+          //updating UI in background requires to happen on main thread
+          dispatch_async(dispatch_get_main_queue(), ^{
+            self.authenticateButton.hidden = NO;
+
+            });
+
           // User did not authenticate successfully, look at error and take appropriate action
           NSLog(@"User authentication failed. %@", error.localizedDescription);
         }
