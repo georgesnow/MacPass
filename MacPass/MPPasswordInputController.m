@@ -47,6 +47,7 @@
 @property (weak) IBOutlet NSButton *enablePasswordCheckBox;
 @property (weak) IBOutlet NSButton *unlockButton;
 @property (weak) IBOutlet NSButton *cancelButton;
+@property (weak) IBOutlet NSButton *authenticateButton;
 
 @property (copy) NSString *message;
 @property (copy) NSString *cancelLabel;
@@ -267,6 +268,12 @@
           NSLog(@"User authentication sucessful! Getting password from the keychain...");
           [self _getPasswordFromKeychain];
         } else {
+          //updating UI in background requires to happen on main thread
+          dispatch_async(dispatch_get_main_queue(), ^{
+            self.authenticateButton.hidden = NO;
+
+            });
+
           // User did not authenticate successfully, look at error and take appropriate action
           NSLog(@"User authentication failed. %@", error.localizedDescription);
         }
@@ -303,6 +310,10 @@
   } else {
     NSLog(@"touchid not setup");
   }
+}
+
+- (IBAction)reAuthenticateTouchId:(id)sender {
+    [self performSelector:@selector(unlockViaTouchID)];
 }
 
 -(void)unlockViaTouchID {
