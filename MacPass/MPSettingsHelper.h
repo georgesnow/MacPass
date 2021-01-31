@@ -82,6 +82,10 @@ APPKIT_EXTERN NSString *const kMPSettingsKeyDoubleClickURLAction;
 APPKIT_EXTERN NSString *const kMPSettingsKeyDoubleClickTitleAction;
 APPKIT_EXTERN NSString *const kMPSettingsKeyUpdatePasswordOnTemplateEntries;
 APPKIT_EXTERN NSString *const kMPSettingsKeyHideAfterCopyToClipboard;
+APPKIT_EXTERN NSString *const kMPSettingsKeyShowMenuItem;
+APPKIT_EXTERN NSString *const kMPSettingsKeyHotKey;
+APPKIT_EXTERN NSString *const kMPSettingsKeyLoginItem;
+APPKIT_EXTERN NSString *const kMPSettingsKeyHideMPDockIcon;
 
 /* Plugins */
 APPKIT_EXTERN NSString *const kMPSettingsKeyLoadUnsecurePlugins;            // If set to YES this will load all plugins regardless of their codesignature status

@@ -89,6 +89,11 @@ NSString *const kMPSettingsKeyAllowRemoteFetchOfPluginRepository          = @"Al
 
 NSString *const kMPSettingsKeyFaviconDownloadMethod                       = @"FaviconDownloadMethod";
 
+NSString *const kMPSettingsKeyShowMenuItem                               = @"kMPSettingsKeyShowMenuItem";
+NSString *const kMPSettingsKeyHotKey                                     = @"kMPSettingsKeyHotKey";
+NSString *const kMPSettingsKeyHideMPDockIcon                             = @"kMPSettingsKeyHideMPDockIcon";
+NSString *const kMPRSettingsKeyLoginItem                                 = @"kMPRSettingsKeyLoginItem";
+
 /* Deprecated */
 NSString *const kMPDeprecatedSettingsKeyRememberKeyFilesForDatabases      = @"kMPSettingsKeyRememberKeyFilesForDatabases";
 NSString *const kMPDeprecatedSettingsKeyLastDatabasePath                  = @"MPLastDatabasePath";
@@ -168,7 +173,11 @@ NSString *const kMPDepricatedSettingsKeyAutotypeHideAccessibiltyWarning   = @"Au
                          kMPSettingsKeyEnableAutosave: @YES,
                          kMPSettingsKeyHideAfterCopyToClipboard: @NO,
                          kMPSettingsKeyFaviconDownloadMethod: @(MPFaviconDownloadMethodDirect), // Download directly from host
-                         kMPSettingsKeyGloablAutotypeAlwaysShowCandidateSelection: @NO
+                         kMPSettingsKeyGloablAutotypeAlwaysShowCandidateSelection: @NO,
+                         kMPSettingsKeyShowMenuItem: @YES,
+                         kMPSettingsKeyHotKey: @NO,
+                         kMPSettingsKeyHideMPDockIcon: @NO,
+                         kMPSettingsKeyLoginItem: @NO
                          };
   });
   return standardDefaults;
